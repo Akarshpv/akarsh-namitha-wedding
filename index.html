@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#173b35" />
+    <meta name="description" content="Akarsh & Namitha's wedding planner" />
+    <title>Akarsh & Namitha — 28.04.2027</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="site-shell">
+      <section class="hero" id="home">
+        <div class="hero-photo" role="img" aria-label="Akarsh and Namitha smiling together"></div>
+        <div class="photo-wash" aria-hidden="true"></div>
+        <div class="hero-glow glow-one"></div>
+        <div class="hero-glow glow-two"></div>
+        <div class="lotus" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <p class="eyebrow">The wedding of</p>
+        <h1>Akarsh <i>&</i> Namitha</h1>
+        <div class="flourish" aria-hidden="true"><span></span>✦<span></span></div>
+        <p class="date">Wednesday, April 28, 2027</p>
+        <p class="venue">Guruvayur Temple</p>
+
+        <div class="countdown" aria-label="Countdown to the wedding">
+          <div><strong id="days">000</strong><small>days</small></div>
+          <div><strong id="hours">00</strong><small>hours</small></div>
+          <div><strong id="minutes">00</strong><small>mins</small></div>
+          <div><strong id="seconds">00</strong><small>secs</small></div>
+        </div>
+
+        <button class="planner-button" id="openPlanner" type="button">
+          <span>Open our planner</span>
+          <b aria-hidden="true">↓</b>
+        </button>
+        <p class="made-with">with love, for the big day</p>
+      </section>
+
+      <section class="planner" id="planner" aria-labelledby="plannerTitle">
+        <header class="planner-heading">
+          <p class="eyebrow">Our preparations</p>
+          <h2 id="plannerTitle">The little things<br /><em>that make it ours.</em></h2>
+          <div class="progress-copy"><span id="progressLabel">0 of 10 complete</span><span id="progressPercent">0%</span></div>
+          <div class="progress-track"><span id="progressBar"></span></div>
+        </header>
+
+        <ul class="checklist" id="checklist" aria-label="Wedding preparation checklist"></ul>
+
+        <form class="add-item" id="addForm">
+          <label class="sr-only" for="newItem">Add a planning task</label>
+          <input id="newItem" type="text" placeholder="Add something special…" maxlength="80" autocomplete="off" />
+          <button type="submit" aria-label="Add task">+</button>
+        </form>
+        <p class="planner-note">Tap a task when it’s beautifully handled.</p>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
