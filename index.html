@@ -28,9 +28,10 @@
         <p class="venue">Guruvayur Temple</p>
 
         <div class="countdown" aria-label="Countdown to the wedding">
-          <div><strong id="days">000</strong><small>days</small></div>
+          <div><strong id="months">00</strong><small>months</small></div>
+          <div><strong id="weeks">00</strong><small>weeks</small></div>
+          <div><strong id="days">00</strong><small>days</small></div>
           <div><strong id="hours">00</strong><small>hours</small></div>
-          <div><strong id="minutes">00</strong><small>mins</small></div>
           <div><strong id="seconds">00</strong><small>secs</small></div>
         </div>
 
@@ -54,6 +55,8 @@
         <form class="add-item" id="addForm">
           <label class="sr-only" for="newItem">Add a planning task</label>
           <input id="newItem" type="text" placeholder="Add something special…" maxlength="80" autocomplete="off" />
+          <label class="sr-only" for="newDate">Target date</label>
+          <input id="newDate" class="new-date" type="date" />
           <button type="submit" aria-label="Add task">+</button>
         </form>
         <p class="planner-note">Tap a task when it’s beautifully handled.</p>
