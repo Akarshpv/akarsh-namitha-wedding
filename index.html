@@ -61,6 +61,21 @@
         </form>
         <p class="planner-note">Tap a task when it’s beautifully handled.</p>
       </section>
+      <section class="plan-sheet" id="planSheet" aria-hidden="true" aria-labelledby="planTitle">
+        <div class="sheet-backdrop" data-close-sheet></div>
+        <div class="sheet-panel" role="dialog" aria-modal="true">
+          <button class="sheet-close" type="button" data-close-sheet aria-label="Close plan details">×</button>
+          <p class="eyebrow">Plan details</p><h2 id="planTitle"></h2>
+          <form id="planForm" class="plan-form">
+            <div class="budget-summary"><div><span>Total budget</span><strong id="budgetTotal">₹0</strong></div><div><span>Remaining</span><strong id="budgetRemaining">₹0</strong></div></div>
+            <label>Target timeline <input id="detailDate" type="date" /></label>
+            <div class="budget-fields"><label>Total budget <span class="currency">₹</span><input id="totalBudget" type="number" min="0" inputmode="decimal" placeholder="0" /></label><label>Advance paid <span class="currency">₹</span><input id="advancePaid" type="number" min="0" inputmode="decimal" placeholder="0" /></label></div>
+            <div class="people-section"><div class="section-label"><span>People or businesses</span><small>Add vendors, contacts, or family</small></div><ul id="peopleList" class="people-list"></ul><div class="add-person"><input id="personName" type="text" maxlength="80" placeholder="Name or business" /><button type="button" id="addPerson">Add</button></div></div>
+            <label>Notes <textarea id="planNotes" rows="3" maxlength="300" placeholder="Anything to remember…"></textarea></label>
+            <button class="save-plan" type="submit">Save plan</button><button class="complete-plan" id="toggleComplete" type="button"></button>
+          </form>
+        </div>
+      </section>
     </main>
     <script src="script.js"></script>
   </body>

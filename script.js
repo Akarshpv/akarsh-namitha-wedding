@@ -1,78 +1,29 @@
-const defaultTasks = [
-  'Auditorium Booking', 'Temple Enquiry', 'Guruvayur Room Booking',
-  'Makeup Booking', 'Photography Booking', 'Travel Arrangements', 'Dress',
-  'Gold', 'Catering Booking', 'Event Management Booking'
-];
-
-const checklist = document.querySelector('#checklist');
-const form = document.querySelector('#addForm');
-const input = document.querySelector('#newItem');
-const newDate = document.querySelector('#newDate');
-const progressLabel = document.querySelector('#progressLabel');
-const progressPercent = document.querySelector('#progressPercent');
-const progressBar = document.querySelector('#progressBar');
-
-let tasks;
-try { tasks = JSON.parse(localStorage.getItem('akarsh-namitha-planner')) || defaultTasks.map(name => ({ name, done: false, targetDate: '' })); }
-catch { tasks = defaultTasks.map(name => ({ name, done: false, targetDate: '' })); }
-tasks = tasks.map(task => ({ ...task, targetDate: task.targetDate || '' }));
-
-function save() { localStorage.setItem('akarsh-namitha-planner', JSON.stringify(tasks)); }
+const defaultTasks = ['Auditorium Booking','Temple Enquiry','Guruvayur Room Booking','Makeup Booking','Photography Booking','Travel Arrangements','Dress','Gold','Catering Booking','Event Management Booking'];
+const $ = selector => document.querySelector(selector);
+const checklist = $('#checklist'), form = $('#addForm'), input = $('#newItem'), newDate = $('#newDate'), progressLabel = $('#progressLabel'), progressPercent = $('#progressPercent'), progressBar = $('#progressBar');
+const sheet = $('#planSheet'), planTitle = $('#planTitle'), planForm = $('#planForm'), detailDate = $('#detailDate'), totalBudget = $('#totalBudget'), advancePaid = $('#advancePaid'), personName = $('#personName'), peopleList = $('#peopleList'), planNotes = $('#planNotes'), budgetTotal = $('#budgetTotal'), budgetRemaining = $('#budgetRemaining'), toggleComplete = $('#toggleComplete');
+let activeIndex = null, tasks;
+const freshTask = name => ({name,done:false,targetDate:'',totalBudget:0,advancePaid:0,people:[],notes:''});
+try { tasks = JSON.parse(localStorage.getItem('akarsh-namitha-planner')) || defaultTasks.map(freshTask); } catch { tasks = defaultTasks.map(freshTask); }
+tasks = tasks.map(task => ({...freshTask(task.name), ...task, targetDate:task.targetDate || '', totalBudget:Number(task.totalBudget)||0, advancePaid:Number(task.advancePaid)||0, people:Array.isArray(task.people)?task.people:[], notes:task.notes||''}));
+const save = () => localStorage.setItem('akarsh-namitha-planner', JSON.stringify(tasks));
+const esc = text => String(text).replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
 function render() {
-  checklist.innerHTML = tasks.map((task, index) => `
-    <li class="task ${task.done ? 'done' : ''} ${index >= defaultTasks.length ? 'custom' : ''}" style="animation-delay:${Math.min(index * 25, 250)}ms">
-      <div class="task-row">
-        <button type="button" data-index="${index}" aria-pressed="${task.done}">
-          <span class="checkmark">${task.done ? '✓' : ''}</span><span class="task-name">${task.name}</span>
-        </button>
-        ${index >= defaultTasks.length ? `<button class="delete-task" type="button" data-delete="${index}" aria-label="Remove ${task.name}">×</button>` : ''}
-      </div>
-      <label class="target-date"><span>Target date</span><input type="date" data-date="${index}" value="${task.targetDate}" aria-label="Target date for ${task.name}" /></label>
-    </li>`).join('');
-  const complete = tasks.filter(task => task.done).length;
-  const percent = tasks.length ? Math.round((complete / tasks.length) * 100) : 0;
-  progressLabel.textContent = `${complete} of ${tasks.length} complete`;
-  progressPercent.textContent = `${percent}%`;
-  progressBar.style.width = `${percent}%`;
+ checklist.innerHTML = tasks.map((task,index) => `<li class="task ${task.done?'done':''} ${index>=defaultTasks.length?'custom':''}" style="animation-delay:${Math.min(index*25,250)}ms"><div class="task-row"><button type="button" data-index="${index}" aria-label="Open ${esc(task.name)}"><span class="checkmark">${task.done?'✓':''}</span><span class="task-name">${esc(task.name)}</span><span class="task-arrow">›</span></button>${index>=defaultTasks.length?`<button class="delete-task" type="button" data-delete="${index}" aria-label="Remove ${esc(task.name)}">×</button>`:''}</div><label class="target-date"><span>Target date</span><input type="date" data-date="${index}" value="${task.targetDate}" aria-label="Target date for ${esc(task.name)}" /></label></li>`).join('');
+ const complete=tasks.filter(task=>task.done).length, percent=tasks.length?Math.round(complete/tasks.length*100):0; progressLabel.textContent=`${complete} of ${tasks.length} complete`; progressPercent.textContent=`${percent}%`; progressBar.style.width=`${percent}%`;
 }
-checklist.addEventListener('click', (event) => {
-  const remove = event.target.closest('[data-delete]');
-  if (remove) { tasks.splice(Number(remove.dataset.delete), 1); save(); render(); return; }
-  const button = event.target.closest('[data-index]');
-  if (!button) return;
-  tasks[Number(button.dataset.index)].done = !tasks[Number(button.dataset.index)].done;
-  save(); render();
-});
-checklist.addEventListener('change', (event) => {
-  const date = event.target.closest('[data-date]');
-  if (!date) return;
-  tasks[Number(date.dataset.date)].targetDate = date.value;
-  save();
-});
-form.addEventListener('submit', event => {
-  event.preventDefault();
-  const name = input.value.trim();
-  if (!name) return input.focus();
-  tasks.push({ name, done: false, targetDate: newDate.value }); save(); render(); input.value = ''; newDate.value = ''; input.focus();
-});
-function updateCountdown() {
-  const now = new Date();
-  const target = new Date('2027-04-28T07:00:00+05:30');
-  if (now >= target) return ['months','weeks','days','hours','seconds'].forEach(id => document.querySelector(`#${id}`).textContent = '00');
-  let cursor = new Date(now);
-  let months = 0;
-  while (true) {
-    const next = new Date(cursor); next.setMonth(next.getMonth() + 1);
-    if (next > target) break;
-    cursor = next; months++;
-  }
-  let remaining = target - cursor;
-  const weeks = Math.floor(remaining / 604800000); remaining %= 604800000;
-  const days = Math.floor(remaining / 86400000); remaining %= 86400000;
-  const hours = Math.floor(remaining / 3600000); remaining %= 3600000;
-  const seconds = Math.floor(remaining / 1000) % 60;
-  const values = [months, weeks, days, hours, seconds];
-  ['months','weeks','days','hours','seconds'].forEach((id, i) => document.querySelector(`#${id}`).textContent = String(values[i]).padStart(2, '0'));
-}
-document.querySelector('#openPlanner').addEventListener('click', () => document.querySelector('#planner').scrollIntoView({ behavior: 'smooth' }));
-updateCountdown(); setInterval(updateCountdown, 1000); render();
+checklist.addEventListener('click', event => { const remove=event.target.closest('[data-delete]'); if(remove){tasks.splice(Number(remove.dataset.delete),1);save();render();return;} const button=event.target.closest('[data-index]'); if(button) openPlan(Number(button.dataset.index)); });
+checklist.addEventListener('change',event=>{const date=event.target.closest('[data-date]');if(date){tasks[Number(date.dataset.date)].targetDate=date.value;save();}});
+form.addEventListener('submit',event=>{event.preventDefault();const name=input.value.trim();if(!name)return input.focus();tasks.push({...freshTask(name),targetDate:newDate.value});save();render();input.value='';newDate.value='';input.focus();});
+const money = value => new Intl.NumberFormat('en-IN',{maximumFractionDigits:0}).format(Math.max(0,Number(value)||0));
+function updateBudgetSummary(){const total=Number(totalBudget.value)||0, paid=Number(advancePaid.value)||0;budgetTotal.textContent=`₹${money(total)}`;budgetRemaining.textContent=`₹${money(total-paid)}`;}
+function renderPeople(){const people=tasks[activeIndex].people;peopleList.innerHTML=people.map((person,index)=>`<li><span>${esc(person)}</span><button type="button" data-person-index="${index}" aria-label="Remove ${esc(person)}">×</button></li>`).join('')||'<li class="empty-person">No one added yet.</li>';}
+function openPlan(index){activeIndex=index;const task=tasks[index];planTitle.textContent=task.name;detailDate.value=task.targetDate;totalBudget.value=task.totalBudget||'';advancePaid.value=task.advancePaid||'';planNotes.value=task.notes;toggleComplete.textContent=task.done?'Mark as not complete':'Mark plan complete';renderPeople();updateBudgetSummary();sheet.classList.add('open');sheet.setAttribute('aria-hidden','false');document.body.classList.add('sheet-open');}
+function closePlan(){sheet.classList.remove('open');sheet.setAttribute('aria-hidden','true');document.body.classList.remove('sheet-open');activeIndex=null;}
+document.querySelectorAll('[data-close-sheet]').forEach(button=>button.addEventListener('click',closePlan));
+$('#addPerson').addEventListener('click',()=>{const person=personName.value.trim();if(!person||activeIndex===null)return personName.focus();tasks[activeIndex].people.push(person);personName.value='';save();renderPeople();personName.focus();});
+peopleList.addEventListener('click',event=>{const remove=event.target.closest('[data-person-index]');if(!remove||activeIndex===null)return;tasks[activeIndex].people.splice(Number(remove.dataset.personIndex),1);save();renderPeople();});
+planForm.addEventListener('submit',event=>{event.preventDefault();if(activeIndex===null)return;Object.assign(tasks[activeIndex],{targetDate:detailDate.value,totalBudget:Number(totalBudget.value)||0,advancePaid:Number(advancePaid.value)||0,notes:planNotes.value.trim()});save();render();closePlan();});
+toggleComplete.addEventListener('click',()=>{if(activeIndex===null)return;tasks[activeIndex].done=!tasks[activeIndex].done;save();render();toggleComplete.textContent=tasks[activeIndex].done?'Mark as not complete':'Mark plan complete';}); totalBudget.addEventListener('input',updateBudgetSummary);advancePaid.addEventListener('input',updateBudgetSummary);
+function updateCountdown(){const now=new Date(),target=new Date('2027-04-28T07:00:00+05:30');if(now>=target)return ['months','weeks','days','hours','seconds'].forEach(id=>document.querySelector(`#${id}`).textContent='00');let cursor=new Date(now),months=0;while(true){const next=new Date(cursor);next.setMonth(next.getMonth()+1);if(next>target)break;cursor=next;months++;}let remaining=target-cursor;const weeks=Math.floor(remaining/604800000);remaining%=604800000;const days=Math.floor(remaining/86400000);remaining%=86400000;const hours=Math.floor(remaining/3600000);remaining%=3600000;const seconds=Math.floor(remaining/1000)%60;[months,weeks,days,hours,seconds].forEach((value,i)=>document.querySelector(`#${['months','weeks','days','hours','seconds'][i]}`).textContent=String(value).padStart(2,'0'));}
+$('#openPlanner').addEventListener('click',()=>$('#planner').scrollIntoView({behavior:'smooth'}));updateCountdown();setInterval(updateCountdown,1000);render();
