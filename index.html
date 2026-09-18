@@ -48,6 +48,7 @@
           <h2 id="plannerTitle">The little things<br /><em>that make it ours.</em></h2>
           <div class="progress-copy"><span id="progressLabel">0 of 10 complete</span><span id="progressPercent">0%</span></div>
           <div class="progress-track"><span id="progressBar"></span></div>
+          <button class="calendar-link" id="openCalendar" type="button"><span>◫</span> View targets calendar</button>
         </header>
 
         <ul class="checklist" id="checklist" aria-label="Wedding preparation checklist"></ul>
@@ -60,6 +61,11 @@
           <button type="submit" aria-label="Add task">+</button>
         </form>
         <p class="planner-note">Tap a task when it’s beautifully handled.</p>
+      </section>
+      <section class="calendar-page" id="calendar" aria-labelledby="calendarTitle">
+        <header class="calendar-heading"><button type="button" class="back-to-planner" id="backToPlanner">← Planner</button><p class="eyebrow">Your target dates</p><h2 id="calendarTitle">Wedding <em>calendar.</em></h2></header>
+        <div class="calendar-card"><div class="calendar-controls"><button type="button" id="previousMonth" aria-label="Previous month">‹</button><h3 id="calendarMonth"></h3><button type="button" id="nextMonth" aria-label="Next month">›</button></div><div class="weekday-row"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="calendar-grid" id="calendarGrid"></div></div>
+        <div class="calendar-events"><p class="eyebrow">Plans on this day</p><div id="calendarEvents"><p class="empty-events">Select a highlighted date to view its plans.</p></div></div>
       </section>
       <section class="plan-sheet" id="planSheet" aria-hidden="true" aria-labelledby="planTitle">
         <div class="sheet-backdrop" data-close-sheet></div>
