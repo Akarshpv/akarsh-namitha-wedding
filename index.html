@@ -49,6 +49,7 @@
           <div class="progress-copy"><span id="progressLabel">0 of 10 complete</span><span id="progressPercent">0%</span></div>
           <div class="progress-track"><span id="progressBar"></span></div>
           <button class="calendar-link" id="openCalendar" type="button"><span>◫</span> View targets calendar</button>
+          <button class="budget-link" id="openBudget" type="button"><span>₹</span> View budget dashboard</button>
         </header>
 
         <ul class="checklist" id="checklist" aria-label="Wedding preparation checklist"></ul>
@@ -66,6 +67,12 @@
         <header class="calendar-heading"><button type="button" class="back-to-planner" id="backToPlanner">← Planner</button><p class="eyebrow">Your target dates</p><h2 id="calendarTitle">Wedding <em>calendar.</em></h2></header>
         <div class="calendar-card"><div class="calendar-controls"><button type="button" id="previousMonth" aria-label="Previous month">‹</button><h3 id="calendarMonth"></h3><button type="button" id="nextMonth" aria-label="Next month">›</button></div><div class="weekday-row"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="calendar-grid" id="calendarGrid"></div></div>
         <div class="calendar-events"><p class="eyebrow">Plans on this day</p><div id="calendarEvents"><p class="empty-events">Select a highlighted date to view its plans.</p></div></div>
+      </section>
+      <section class="budget-page" id="budget" aria-labelledby="budgetTitle">
+        <header class="budget-heading"><button type="button" class="back-to-planner" id="budgetBack">← Planner</button><p class="eyebrow">All plans together</p><h2 id="budgetTitle">Budget <em>dashboard.</em></h2></header>
+        <div class="budget-hero"><div><span>Planned budget</span><strong id="dashboardTotal">₹0</strong></div><div class="budget-ring" id="budgetRing"><span id="budgetPercent">0%</span><small>paid</small></div><div><span>Advance paid</span><strong id="dashboardPaid">₹0</strong></div></div>
+        <div class="dashboard-stats"><article><span>Remaining</span><strong id="dashboardRemaining">₹0</strong></article><article><span>Plans budgeted</span><strong id="dashboardCount">0</strong></article><article><span>Average plan</span><strong id="dashboardAverage">₹0</strong></article></div>
+        <section class="budget-breakdown"><div class="dashboard-section-title"><div><p class="eyebrow">Where it goes</p><h3>Plan breakdown</h3></div><button type="button" id="sortBudget">Highest first</button></div><div id="budgetPlanList" class="budget-plan-list"></div></section>
       </section>
       <section class="plan-sheet" id="planSheet" aria-hidden="true" aria-labelledby="planTitle">
         <div class="sheet-backdrop" data-close-sheet></div>
